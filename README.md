@@ -1,6 +1,6 @@
 # Arcade
 
-## Get image
+## Get Raspberry Pi image
 
 - Locate your USB or SD drive with `diskutil list` on macOS or `fdisk-l` on
   Linux.
@@ -49,6 +49,27 @@ separator.
 echo 'XKBOPTIONS="ctrl:nocaps"' | sudo tee -a /etc/default/keyboard
 ```
 
+### Fix DRM boot config
+
+Change `kms` to `fkms` in this line in `/boot/config.txt`.
+
+```
+# Enable DRM VC4 V3D driver
+dtoverlay=vc4-kms-v3d
+```
+
+Issue: https://github.com/raysan5/raylib/issues/2259
+
+
+### Enable audio
+
+```
+sudo raspi-config
+<Select System Options>
+<Select S2 Audio>
+Pick the right thing here, probably headphones.
+```
+
 ### Install tools
 
 
@@ -69,12 +90,7 @@ sudo apt install -y git
 mkdir "$HOME"/src
 cd; cd src
 
-# Install dotfiles
-git clone git@github.com:wbbradley/dotfiles.git
-cd dotfiles
-./install.sh
-exec -l bash
-clean-vim.sh
+# Install your dotfiles
 
 # Install Rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
@@ -88,7 +104,7 @@ git clone git@github.com:raysan5/raylib.git $HOME/src/raylib
 cd $HOME/src/raylib
 
 # Install raylib build dependencies
-sudo apt-get install cmake
+sudo apt-get install cmake libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev clang
 
 # Install raylib runtime dependencies
 # From https://github.com/raysan5/raylib/wiki/Working-on-Raspberry-Pi
@@ -96,5 +112,7 @@ sudo apt-get install libdrm-dev libegl1-mesa-dev libgles2-mesa-dev libgbm-dev
 
 mkdir build
 cd build
-cmake ..
+cmake -DPLATFORM=DRM ..
+make 
+sudo make install
 ```
