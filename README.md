@@ -5,7 +5,7 @@
 - Locate your USB or SD drive with `diskutil list` on macOS or `fdisk-l` on
   Linux.
 - Unmount is with `diskutil unmountDisk /dev/disk1` or `sudo umount /dev/sdb1`
-- Download raspi image from https://www.raspberrypi.com/software/operating-systems/
+- Download 'Raspberry Pi OS Lite' raspi image from https://www.raspberrypi.com/software/operating-systems/
 - Decompress with gunzip -d <filename>
 - Blast the ISO onto the drive.
 
